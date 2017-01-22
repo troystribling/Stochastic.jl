@@ -5,11 +5,10 @@ module Stochastic
 using Distributions
 
 export
-  RandomProcess
+  RandomProcess,
   BrownianMotion
-end
 
-include("Utils.jl")
-include("RandomProcess.jl")
+  include("Utils.jl")
+  include("RandomProcess.jl")
 
 end
