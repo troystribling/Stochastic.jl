@@ -1,5 +1,15 @@
+__precompile__(true)
+
 module Stochastic
 
-# package code goes here
+using Distributions
 
-end # module
+export
+  RandomProcess
+  BrownianMotion
+end
+
+include("Utils.jl")
+include("RandomProcess.jl")
+
+end
