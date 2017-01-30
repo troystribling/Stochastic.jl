@@ -17,11 +17,12 @@ end
 SampleInterval{T<:Integer, U<:Real}(npts::T, tmax::U, tmin::U) = SampleInterval{T, U}(npts, tmax, tmin)
 SampleInterval(npts::Integer, tmax::Integer, tmin::Integer) = SampleInterval(UInt64(npts), Float64(tmax), Float64(tmin))
 SampleInterval(npts::Real, tmax::Real, tmin::Real) = SampleInterval(UInt64(npts), promote(tmax, tmin)...)
-SampleInterval(npts::Integer, tmax::Real, tmin::Real) = SampleInterval(UInt64(npts), promote(tmax, tmin)...)
+SampleInterval(npts::Integer, tmax::Real, tmin::Real) = SampleInterval(npts, promote(tmax, tmin)...)
 SampleInterval(npts::Integer, tmax::Real) = SampleInterval(npts, tmax, zero(tmax))
 
 # conversions
 convert{T<:Integer, U<:Real, V<:Integer, W<:Real}(::Type{SampleInterval{T, U}}, npts::V, tmax::W, tmin::W) = SampleInterval(T(npts), U(tmax), U(tmin))
+convert{T<:Integer, U<:Real, V<:Integer, W<:Real}(::Type{SampleInterval{T, U}}, npts::V, tmax::W) = SampleInterval(T(npts), U(tmax))
 convert{T<:Integer, U<:Real, V<:Integer, W<:Real}(::Type{SampleInterval{T, U}}, s::SampleInterval{V, W}) = SampleInterval(T(s.npts), U(s.tmax), U(s.tmin))
 convert{T<:Integer, U<:Real, V<:Integer, W<:Real}(::Type{SampleInterval{T, U}}, s::SampleInterval{V, W}) = SampleInterval(T(s.npts), U(s.tmax))
 
@@ -59,5 +60,5 @@ params(randomProcess::BrownianMotion) = (randomProcess.σ)
 # generation
 function rand(randomProcess::BrownianMotion, sampleInterval::SampleInterval)
   Δt = (sampleInterval.tmax - sampleInterval.tmin) / sampleInterval.npts
-  dist = Normal(randomProcess.μ, randomProcess.σ)
+  dist = Normal(0.0, randomProcess.σ/Δt)
 end
