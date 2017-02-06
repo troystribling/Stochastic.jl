@@ -4,10 +4,18 @@ module Stochastic
 
 using Distributions
 
-export
-  RandomProcess,
-  BrownianMotion
+import Distributions: rand
 
+export
+
+  # random process types
+  RandomProcess,
+  BrownianMotion,
+
+  # methods
+  params
+
+  # source files
   include("Utils.jl")
   include("RandomProcess.jl")
 

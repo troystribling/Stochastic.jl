@@ -7,9 +7,9 @@ Time interval for evaluluation of randowm process where tmin is the start time, 
 and npts the number of points in the sample.
 """
 immutable SampleInterval{T<:Integer, U<:Real}
-  npts::U
-  tmin::T
-  tmax::T
+  npts::T
+  tmax::U
+  tmin::U
   SampleInterval(npts::T, tmax::U, tmin::U) = tmax > tmin && npts > zero(npts) ? new(npts, tmax, tmin) : error("must have tmax > tmin && npts > 0")
 end
 
@@ -58,7 +58,12 @@ convert{T<:Real, U<:Real}(::Type{BrownianMotion{T}}, b::BrownianMotion{U}) = Bro
 params(randomProcess::BrownianMotion) = (randomProcess.σ)
 
 # generation
-function rand(randomProcess::BrownianMotion, sampleInterval::SampleInterval)
-  Δt = (sampleInterval.tmax - sampleInterval.tmin) / sampleInterval.npts
-  dist = Normal(0.0, randomProcess.σ/Δt)
+function rand(randomProcess::BrownianMotion, interval::SampleInterval)
+  Δt = (interval.tmax - interval.tmin) / interval.npts
+  bm = zeros(Float64, 1)
+  for n = 2:interval.npts
+      Δbm = sqrt(Δt)*rand(Normal())
+      push!(bm, bm[n-1] + Δbm)
+  end
+  return bm
 end
