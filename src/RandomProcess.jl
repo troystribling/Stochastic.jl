@@ -26,6 +26,7 @@ convert{T<:Integer, U<:Real, V<:Integer, W<:Real}(::Type{SampleInterval{T, U}}, 
 
 # parameters
 params(sampleInterval::SampleInterval) = (sampleInterval.npts, sampleInterval.tmax, sampleInterval.tmin)
+Δt(sampleInterval::SampleInterval) =  (sampleInterval.tmax - sampleInterval.tmin) / sampleInterval.npts
 
 function samples(sampleInterval::SampleInterval)
     collect(linspace(sampleInterval.tmin, sampleInterval.tmax, sampleInterval.npts))
@@ -60,12 +61,11 @@ params(randomProcess::BrownianMotion) = (randomProcess.μ, randomProcess.σ)
 
 # generation
 function increments(randomProcess::BrownianMotion, interval::SampleInterval)
-  Δt = (interval.tmax - interval.tmin) / interval.npts
-  μ = Δt * randomProcess.μ
-  σ = sqrt(Δt) * randomProcess.σ
+  μ = Δt(interval) * randomProcess.μ
+  σ = sqrt(Δt(interval)) * randomProcess.σ
   bm = zeros(Float64, interval.npts-1)
   for n = 1:interval.npts-1
-    bm[n] = rand(Normal(randomProcess.μ, randomProcess.σ))
+    bm[n] = rand(Normal(μ, σ))
   end
   return bm
 end
