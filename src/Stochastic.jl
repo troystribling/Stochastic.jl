@@ -3,8 +3,10 @@ __precompile__(true)
 module Stochastic
 
 using Distributions
+using Gadfly
 
 import Distributions: rand
+import Gadfly: plot
 
 export
 
@@ -16,7 +18,7 @@ export
   params
 
   # source files
-  include("Utils.jl")
-  include("RandomProcess.jl")
+  include("Plots.jl")
+  include("BrownianMotion.jl")
 
 end
