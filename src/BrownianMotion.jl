@@ -90,7 +90,6 @@ https://en.wikipedia.org/wiki/Geometric_Brownian_motion
 immutable GeometricBrownianMotion{T<:Real} <: RandomProcess
   brownianMotion::BrownianMotion{T}
   s0::T
-
   GeometricBrownianMotion(brownianMotion, s0) = s0 != zero(s0) ? new{T}(brownianMotion, s0) : error("must have s0 ! 0")
 end
 
